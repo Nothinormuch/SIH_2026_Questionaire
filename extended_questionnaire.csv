@@ -1,0 +1,30 @@
+1,Which broad category of problem statement are you most comfortable working on?,Software,Hardware,Both / No Preference,,
+2,How do you rate your team's expertise in AI & Machine Learning?,Beginner,Intermediate,Advanced,Not interested in AI/ML,
+3,How do you rate your team's expertise in Web & Mobile App Development?,Beginner,Intermediate,Advanced,Not interested in Web/App Dev,
+4,"How do you rate your team's expertise in IoT, Hardware, and Sensors?",Beginner,Intermediate,Advanced,Not interested in Hardware/IoT,
+5,Which advanced technology are you most excited to explore?,Blockchain & Cybersecurity,AR/VR & Game Development,Space Tech & Satellite Data,Robotics & Drones,None of the above
+6,Which domain motivates you the most? (Group 1),"Healthcare, MedTech & BioTech","Agriculture, FoodTech & Rural Development",Smart Education & Toys,Fitness & Sports,
+7,Which domain motivates you the most? (Group 2),Disaster Management,Clean & Green Technology / Renewable Energy,Smart Resource Conservation,"Travel, Tourism & Heritage",
+8,Which domain motivates you the most? (Group 3),Smart Automation & Vehicles,Transportation & Logistics,Defense & Security,Miscellaneous / General Governance,
+9,What type of organization do you want to solve a problem for?,"Central/State Government Ministries (e.g., Rural Dev, MSME)","Defense & Intelligence (e.g., DRDO, NTRO, ISRO)","Corporate/Tech Companies (e.g., Qualcomm, Autodesk, MathWorks)","Public Sector Undertakings (e.g., Oil India, MRPL)",No Preference
+10,Who is the ideal end-user for your solution?,Farmers & Rural Communities,Students & Educators,"Patients, Elderly & Healthcare Workers",Citizens (General Public),Government Officials & Administrators
+11,"If working on an AI problem, what sub-field do you prefer?",Computer Vision (Image/Video analysis),Natural Language Processing (Text/Speech),Predictive Analytics & Forecasting,Generative AI,Not applicable
+12,What kind of user interface do you prefer building?,Complex Web Dashboards (Analytics/GIS),Consumer-facing Mobile Apps (Android/iOS),Chatbots & Voice Assistants,Physical Hardware Interfaces/Displays,Gamified UI / Interactive 3D
+13,How do you feel about working on solutions requiring multilingual support (regional languages)?,"Love it, eager to implement",Okay with it if APIs are available,Prefer English-only solutions,,
+14,How do you feel about working on solutions for low internet / offline environments?,Very interested in offline-first architectures,Okay with basic offline caching,Prefer always-connected cloud solutions,,
+15,What is your approach to handling data?,Prefer datasets to be provided by the organization,Comfortable scraping/collecting our own data,Prefer generating synthetic data,Prefer hardware sensor-generated data,
+16,"Would you prefer a problem statement specific to a particular geography (e.g., North Eastern Region, Hilly Terrains)?","Yes, localized problems are interesting","No, prefer Pan-India or global scale problems",No Preference,,
+17,"If working on Hardware, what is your preferred focus?",Microcontrollers & IoT Sensors (Arduino/Raspberry Pi),Mechanical Design & Robotics,Drones & UAVs,Energy / Solar / Battery Systems,Not applicable (Software only)
+18,How important is the 'Social Impact' of the problem to you?,Extremely Important (primary driver),Moderately Important,Less Important (focus more on tech complexity),,
+19,"Are you interested in problems involving mapping, GIS (Geographic Information Systems), and satellite imagery?",Very interested,Somewhat interested,Not interested,,
+20,"Do you prefer a problem statement that requires integrating with existing government systems (APIs, databases)?","Yes, love working with real-world integrations","No, prefer building a standalone system from scratch",No Preference,,
+21,"Are you interested in supply chain, tracking, and logistics optimization?",Yes,No,Only if it involves AI/ML forecasting,,
+22,"How interested are you in gamification or building serious games (e.g., for education or therapy)?",Very interested,Open to it as a small feature,Not interested at all,,
+23,"When it comes to the problem's scope, do you prefer:","A highly specific, well-defined problem with clear constraints","An open-ended, exploratory problem with room for massive innovation",Somewhere in between,,
+24,"Are you interested in tackling problems related to heritage conservation, culture, or tourism?","Yes, very much",Neutral,"No, prefer more technical/industrial domains",,
+25,"Are you interested in solving issues related to weather forecasting, climate change, or disaster early warnings?","Yes, definitely",Neutral,No,,
+26,"How do you feel about strict accessibility requirements (e.g., UI for visually impaired, elderly-friendly)?",Passionate about building inclusive tech,Willing to learn and implement,Prefer standard UI/UX development,,
+27,"If you had to choose a primary platform for your solution, what would it be?",Web Browser / Cloud Platform,Mobile Smartphone / Tablet,Desktop Application,Custom Hardware Device,
+28,"Are you interested in problems focusing on predictive maintenance (e.g., predicting when machines/vehicles will fail)?","Yes, highly interested",Somewhat interested,Not interested,,
+29,What is the team's strongest collective skill?,Backend Development & Cloud Architecture,Frontend Development & UI/UX Design,Machine Learning Model Training & Deployment,Hardware Prototyping & Embedded Systems,"Research, Ideation & Presentation"
+30,"If there is a tie between problem statements, what should be the final deciding factor?",Whichever has less competition,Whichever uses the coolest / most modern tech stack,Whichever has the highest potential for real-world deployment,Whichever perfectly matches our existing skills,

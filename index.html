@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIH 2026 Team Questionnaire</title>
+    <!-- Using PapaParse to easily read the CSV file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        p.instructions {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #555;
+        }
+        .question-card {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        .option {
+            margin-bottom: 10px;
+            display: block;
+            cursor: pointer;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Team Preferences Questionnaire</h1>
+    <p class="instructions">Please fill out this form to help us decide our problem statement. Once submitted, a CSV file with your answers will be downloaded. Please send that file to the team lead.</p>
+    
+    <form id="questionnaire-form" onsubmit="event.preventDefault(); generateSummary();"></form>
+    
+    <button id="submit-btn" style="display:none;" onclick="generateSummary()">Download My Answers</button>
+    <div id="error-msg" class="error"></div>
+</div>
+
+<script>
+    let questionsData = [];
+
+    // Fetch and parse the CSV from the GitHub repo
+    Papa.parse("extended_questionnaire.csv", {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+            questionsData = results.data;
+            renderForm();
+        },
+        error: function(err) {
+            console.error("Error loading CSV:", err);
+            document.getElementById('error-msg').innerText = "Error loading the questionnaire. Please ensure 'extended_questionnaire.csv' is uploaded to your GitHub repository and you are viewing this via GitHub Pages.";
+        }
+    });
+
+    function renderForm() {
+        const form = document.getElementById('questionnaire-form');
+        
+        questionsData.forEach((q) => {
+            if (!q.Question) return; // Skip empty rows
+
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            
+            const title = document.createElement('div');
+            title.className = 'question-title';
+            title.innerText = `${q.Question_Number}. ${q.Question}`;
+            card.appendChild(title);
+
+            // Filter out empty options
+            const options = [q.Option_A, q.Option_B, q.Option_C, q.Option_D, q.Option_E].filter(opt => opt && opt.trim() !== "");
+
+            options.forEach((opt) => {
+                const label = document.createElement('label');
+                label.className = 'option';
+
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `question_${q.Question_Number}`;
+                radio.value = opt;
+                radio.required = true;
+
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(" " + opt));
+                card.appendChild(label);
+            });
+
+            form.appendChild(card);
+        });
+        document.getElementById('submit-btn').style.display = 'block';
+    }
+
+    function generateSummary() {
+        const form = document.getElementById('questionnaire-form');
+        
+        // Ensure all questions are answered
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        const formData = new FormData(form);
+        let summary = "Question_Number,Answer\n";
+        
+        questionsData.forEach(q => {
+            if (!q.Question) return;
+            const answer = formData.get(`question_${q.Question_Number}`);
+            
+            // Escape quotes for CSV safety
+            const safeAnswer = answer ? `"${answer.replace(/"/g, '""')}"` : '""';
+            summary += `${q.Question_Number},${safeAnswer}\n`;
+        });
+
+        // Prompt user for their name to name the file
+        let userName = prompt("Please enter your name (this will be used for the file name):", "Teammate");
+        if (!userName) userName = "Teammate";
+
+        // Create Blob and trigger download
+        const blob = new Blob([summary], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `Answers_${userName}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+
+</body>
+</html>
+
