@@ -9,7 +9,7 @@ Instead of reading through hundreds of problem statements manually, your team an
 * `questionnaire.csv` - The file that holds the 30 questions shown on the website.
 * `problem_statements.csv` - The complete, master list of all SIH 2026 Problem Statements.
 
-## 🛠️ Step-by-Step Guide: How to Use This
+## 🛠️ Step-by-Step Guide: How to recreate this for next year
 
 ### Step 1: Put the Website Online
 To let your team fill out the form, you need to host the website on GitHub Pages. It is free and very easy to do.
