@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 4: Unleash the AI | SIH 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            margin: 0;
+            padding: 20px;
+            color: #1f2937;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(22, 101, 52, 0.12);
+            animation: containerIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            transform-origin: top center;
+        }
+        @keyframes containerIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeUp 0.7s ease 0.1s both;
+        }
+        .header h1 {
+            color: #166534;
+            font-weight: 800;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #4b5563;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        .step-indicator {
+            display: inline-block;
+            background: #dcfce7;
+            color: #166534;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            animation: fadeUp 0.6s ease 0.2s both;
+        }
+        .content {
+            animation: fadeUp 0.7s ease 0.3s both;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background-color: #16a34a;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+            text-align: center;
+            text-decoration: none;
+            box-sizing: border-box;
+        }
+        .btn:hover {
+            background-color: #15803d;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(22, 101, 52, 0.25);
+        }
+        .btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+        .btn-secondary {
+            background-color: #3b82f6;
+            margin-bottom: 15px;
+        }
+        .btn-secondary:hover {
+            background-color: #2563eb;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25);
+        }
+        .prompt-box {
+            background: #1f2937;
+            color: #f3f4f6;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            white-space: pre-wrap;
+            animation: fadeUp 0.6s ease 0.4s both;
+            transition: box-shadow 0.3s;
+        }
+        .prompt-box:hover {
+            box-shadow: 0 8px 25px rgba(31, 41, 55, 0.3);
+        }
+        .copy-btn {
+            background: #4b5563;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 30px;
+            transition: background-color 0.3s, transform 0.2s;
+            animation: fadeUp 0.6s ease 0.5s both;
+        }
+        .copy-btn:hover { background: #374151; transform: translateY(-2px); }
+        .copy-btn:active { transform: scale(0.95); }
+        .llm-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            animation: fadeUp 0.6s ease 0.6s both;
+        }
+        .llm-links a {
+            flex: 1;
+        }
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #166534;
+            color: white;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(22, 101, 52, 0.3);
+            z-index: 2000;
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        .toast .check {
+            font-size: 1.2em;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>SIH 2026 Problem Selector 🚀</h1>
+        <p>Stop arguing over which problem statement to pick. Fill out this strategic questionnaire, and let AI analyze your team's unique strengths to find the perfect match for Smart India Hackathon 2026.</p>
+    </div>
+    
+    <div class="content">
+        <div class="step-indicator">Step 4 of 4: Unleash the AI</div>
+        <p>Copy the prompt below, click on one of the recommended AI links, and <strong>upload BOTH downloaded CSV files</strong> into the chat to get your personalized Top 10 list!</p>
+        
+        <div class="prompt-box" id="ai-prompt">I am participating in the Smart India Hackathon (SIH) 2026.
+
+I have uploaded two CSV files to this chat:
+1. My team's preferences and skill levels (Answers CSV).
+2. The complete master list of SIH 2026 problem statements (problem_statements.csv).
+
+Acting as an expert hackathon mentor, please cross-reference my team's answers against the problem statements database. 
+Provide the Top 10 best-fitting problem statements for our team. For each recommendation, provide the PS Number, Title, and a brief 2-sentence explanation of EXACTLY why it perfectly aligns with our specific skills and domain preferences.</div>
+        
+        <button class="copy-btn" onclick="copyPrompt()">📋 Copy Prompt to Clipboard</button>
+
+        <h3>Recommended AIs (Choose One):</h3>
+        <p style="font-size: 0.9em; color: #4b5563;"><em>Tip: Gemini is highly recommended as it natively handles multiple CSV file uploads and data analysis exceptionally well.</em></p>
+        <div class="llm-links">
+            <a href="https://gemini.google.com/" target="_blank" class="btn" style="background-color: #1a73e8;">Open Google Gemini ✨</a>
+            <a href="https://chatgpt.com/" target="_blank" class="btn" style="background-color: #10a37f;">Open ChatGPT</a>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"><span class="check">✅</span><span id="toast-text">Copied to clipboard!</span></div>
+
+<script>
+    function copyPrompt() {
+        const promptText = document.getElementById('ai-prompt').innerText;
+        navigator.clipboard.writeText(promptText).then(() => {
+            showToast('Prompt copied to clipboard!');
+        });
+    }
+
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        document.getElementById('toast-text').innerText = message;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+</script>
+
+</body>
+</html>

@@ -3,100 +3,314 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIH 2026 Team Questionnaire</title>
+    <title>SIH 2026: The Ultimate Problem Statement Selector</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
+        * { box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
             margin: 0;
             padding: 20px;
-            color: #333;
+            color: #1f2937;
+            min-height: 100vh;
         }
         .container {
             max-width: 800px;
-            margin: 0 auto;
+            margin: 40px auto;
             background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(22, 101, 52, 0.12);
+            animation: containerIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            transform-origin: top center;
         }
-        h1 {
-            text-align: center;
-            color: #2c3e50;
+        @keyframes containerIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        p.instructions {
+        .header {
             text-align: center;
-            margin-bottom: 30px;
-            color: #555;
+            margin-bottom: 40px;
+            animation: fadeUp 0.7s ease 0.1s both;
+        }
+        .header h1 {
+            color: #166534;
+            font-weight: 800;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #4b5563;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        .step-indicator {
+            display: inline-block;
+            background: #dcfce7;
+            color: #166534;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            animation: fadeUp 0.6s ease 0.2s both;
         }
         #loading {
             text-align: center;
             font-size: 1.2em;
-            color: #2980b9;
-            font-weight: bold;
-            margin-bottom: 20px;
+            color: #15803d;
+            font-weight: 600;
+            padding: 40px 0;
+            animation: fadeUp 0.5s ease both;
         }
+        .spinner {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            border: 3px solid #bbf7d0;
+            border-top-color: #16a34a;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
         .question-card {
             margin-bottom: 25px;
-            padding: 20px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            background-color: #fafafa;
+            padding: 25px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            background-color: #f9fafb;
+            transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+            opacity: 0;
+            animation: cardIn 0.5s ease forwards;
+        }
+        .question-card:hover {
+            border-color: #bbf7d0;
+            box-shadow: 0 8px 20px rgba(22, 101, 52, 0.08);
+            transform: translateY(-2px);
+        }
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .question-title {
             font-weight: 600;
             margin-bottom: 15px;
-            font-size: 1.1em;
+            font-size: 1.15em;
+            color: #111827;
         }
         .option {
-            margin-bottom: 10px;
-            display: block;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+        .option:hover {
+            background-color: #e5e7eb;
+            transform: translateX(4px);
+        }
+        .option input {
+            margin-right: 12px;
+            transform: scale(1.2);
+            accent-color: #16a34a;
             cursor: pointer;
         }
-        button {
+        .btn {
             display: block;
             width: 100%;
-            padding: 15px;
-            background-color: #3498db;
+            padding: 16px;
+            background-color: #16a34a;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s;
-            margin-top: 20px;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+            text-align: center;
+            text-decoration: none;
+            box-sizing: border-box;
         }
-        button:hover {
-            background-color: #2980b9;
+        .btn:hover {
+            background-color: #15803d;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(22, 101, 52, 0.25);
+        }
+        .btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+        .btn-secondary {
+            background-color: #3b82f6;
+            margin-bottom: 15px;
+        }
+        .btn-secondary:hover {
+            background-color: #2563eb;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25);
         }
         .error {
-            color: #e74c3c;
+            color: #dc2626;
             text-align: center;
-            font-weight: bold;
+            font-weight: 600;
             margin-top: 20px;
+            animation: shake 0.4s ease;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .modal-overlay.active .modal {
+            transform: scale(1) translateY(0);
+        }
+        .modal h3 {
+            margin: 0 0 10px;
+            color: #166534;
+            font-weight: 800;
+        }
+        .modal p {
+            color: #4b5563;
+            margin: 0 0 20px;
+            font-size: 0.95em;
+        }
+        .modal input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            margin-bottom: 20px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            outline: none;
+        }
+        .modal input:focus {
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+        }
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .modal-actions .btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 15px;
+        }
+        .modal-actions .btn-cancel {
+            background-color: #6b7280;
+        }
+        .modal-actions .btn-cancel:hover {
+            background-color: #4b5563;
+        }
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #166534;
+            color: white;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(22, 101, 52, 0.3);
+            z-index: 2000;
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        .toast .check {
+            font-size: 1.2em;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Team Preferences Questionnaire</h1>
-    <p class="instructions">Please fill out this form to help us decide our problem statement. Once submitted, a CSV file with your answers will be downloaded. Please send that file to the team lead.</p>
+    <div class="header">
+        <h1>SIH 2026 Problem Selector 🚀</h1>
+        <p>Stop arguing over which problem statement to pick. Fill out this strategic questionnaire, and let AI analyze your team's unique strengths to find the perfect match for Smart India Hackathon 2026.</p>
+    </div>
     
-    <div id="loading">Loading questions from CSV...</div>
-    <div id="error-msg" class="error"></div>
+    <!-- Step 1: Questionnaire -->
+    <div id="step-1">
+        <div class="step-indicator">Step 1 of 4: Discover Your Strengths</div>
+        <div id="loading"><span class="spinner"></span>Loading intelligent questionnaire...</div>
+        <div id="error-msg" class="error"></div>
 
-    <form id="questionnaire-form" onsubmit="event.preventDefault(); generateSummary();" style="display:none;"></form>
-    
-    <button id="submit-btn" style="display:none;" onclick="generateSummary()">Download My Answers</button>
+        <form id="questionnaire-form" onsubmit="event.preventDefault(); processSubmission();" style="display:none;"></form>
+        
+        <button id="submit-btn" class="btn" style="display:none; margin-top: 30px;" onclick="processSubmission()">Submit & Generate Preferences</button>
+    </div>
+
 </div>
 
-<script>
-    let validQuestionsMap = []; // Stores the mapping for the download step
+<!-- Name Modal -->
+<div class="modal-overlay" id="name-modal">
+    <div class="modal">
+        <h3>📝 Name Your File</h3>
+        <p>Enter your name so we can personalize your answers file.</p>
+        <input type="text" id="name-input" placeholder="Teammate" value="Teammate">
+        <div class="modal-actions">
+            <button class="btn btn-cancel" onclick="closeNameModal()">Cancel</button>
+            <button class="btn" onclick="confirmName()">Continue →</button>
+        </div>
+    </div>
+</div>
 
-    Papa.parse("extended_questionnaire.csv", {
+<!-- Toast -->
+<div class="toast" id="toast"><span class="check">✅</span><span id="toast-text">Done!</span></div>
+
+<script>
+    let validQuestionsMap = [];
+    let pendingSummary = null;
+    let cardDelay = 0;
+
+    Papa.parse("questionnaire.csv", {
         download: true,
         header: true,
         skipEmptyLines: true,
@@ -114,9 +328,8 @@
 
             data.forEach((row, index) => {
                 const keys = Object.keys(row);
-                if (keys.length < 2) return; // Skip invalid empty rows
+                if (keys.length < 2) return;
 
-                // Dynamically read columns (Col 0: Number, Col 1: Question, Col 2+: Options)
                 const qNum = row[keys[0]] || (index + 1);
                 const qText = row[keys[1]];
 
@@ -124,31 +337,28 @@
 
                 const card = document.createElement('div');
                 card.className = 'question-card';
+                card.style.animationDelay = `${cardDelay}s`;
+                cardDelay += 0.08;
                 
                 const title = document.createElement('div');
                 title.className = 'question-title';
                 title.innerText = `${qNum}. ${qText}`;
                 card.appendChild(title);
 
-                // Dynamically grab all columns after the first two as options
                 const options = [];
                 for(let i = 2; i < keys.length; i++) {
                     const optVal = row[keys[i]];
-                    if (optVal && optVal.trim() !== "") {
-                        options.push(optVal);
-                    }
+                    if (optVal && optVal.trim() !== "") options.push(optVal);
                 }
 
                 options.forEach((opt) => {
                     const label = document.createElement('label');
                     label.className = 'option';
-
                     const radio = document.createElement('input');
                     radio.type = 'radio';
                     radio.name = `question_${qNum}`;
                     radio.value = opt;
                     radio.required = true;
-
                     label.appendChild(radio);
                     label.appendChild(document.createTextNode(" " + opt));
                     card.appendChild(label);
@@ -161,42 +371,50 @@
 
             if (questionsAdded > 0) {
                 form.style.display = 'block';
-                document.getElementById('submit-btn').style.display = 'block';
+                const submitBtn = document.getElementById('submit-btn');
+                submitBtn.style.display = 'block';
+                submitBtn.style.animation = 'fadeUp 0.6s ease 0.3s both';
             } else {
-                document.getElementById('error-msg').innerHTML = "No valid questions found in the CSV.";
+                document.getElementById('error-msg').innerHTML = "No valid questions found.";
             }
-        },
-        error: function(err) {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('error-msg').innerHTML = `Failed to load CSV: ${err.message}`;
         }
     });
 
-    function generateSummary() {
+    function processSubmission() {
         const form = document.getElementById('questionnaire-form');
-        
-        // Ensure all questions are answered
         if (!form.checkValidity()) {
             form.reportValidity();
             return;
         }
 
         const formData = new FormData(form);
-        let summary = "Question_Number,Answer\n";
+        let summary = "Question,Answer\n";
         
         validQuestionsMap.forEach(q => {
             const answer = formData.get(`question_${q.num}`);
-            // Escape quotes for CSV safety
+            const safeQ = `"${q.text.replace(/"/g, '""')}"`;
             const safeAnswer = answer ? `"${answer.replace(/"/g, '""')}"` : '""';
-            summary += `"${q.num}",${safeAnswer}\n`;
+            summary += `${safeQ},${safeAnswer}\n`;
         });
 
-        // Prompt user for their name to name the file
-        let userName = prompt("Please enter your name (this will be used for the file name):", "Teammate");
+        pendingSummary = summary;
+        openNameModal();
+    }
+
+    function openNameModal() {
+        document.getElementById('name-modal').classList.add('active');
+        setTimeout(() => document.getElementById('name-input').focus(), 300);
+    }
+
+    function closeNameModal() {
+        document.getElementById('name-modal').classList.remove('active');
+    }
+
+    function confirmName() {
+        let userName = document.getElementById('name-input').value.trim();
         if (!userName) userName = "Teammate";
 
-        // Create Blob and trigger download
-        const blob = new Blob([summary], { type: 'text/csv;charset=utf-8;' });
+        const blob = new Blob([pendingSummary], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
@@ -204,9 +422,29 @@
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+
+        closeNameModal();
+        showToast(`Answers_${userName}.csv downloaded!`);
+        setTimeout(() => { window.location.href = 'step2.html'; }, 1200);
     }
+
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        document.getElementById('toast-text').innerText = message;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // Close modal on overlay click
+    document.getElementById('name-modal').addEventListener('click', function(e) {
+        if (e.target === this) closeNameModal();
+    });
+
+    // Enter key in input confirms
+    document.getElementById('name-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') confirmName();
+    });
 </script>
 
 </body>
 </html>
-
