@@ -14,7 +14,7 @@ Instead of reading through hundreds of problem statements manually, your team an
 ### Step 1: Put the Website Online
 To let your team fill out the form, you need to host the website on GitHub Pages. It is free and very easy to do.
 1. Create a public repository on your GitHub account.
-2. Upload all three files (`index.html`, `extended_questionnaire.csv`, and `problem_statements.csv`) into that repository.
+2. Upload all three files (`index.html`, `questionnaire.csv`, and `problem_statements.csv`) into that repository.
 3. In your GitHub repository, click on the **Settings** tab.
 4. On the left side menu, click on **Pages**.
 5. Under the "Build and deployment" section, look for "Branch". Change it from `none` to `main` (or `master`), and click **Save**.
