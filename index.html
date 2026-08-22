@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIH 2026 Team Questionnaire</title>
-    <!-- Using PapaParse to easily read the CSV file -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
         body {
@@ -30,6 +29,13 @@
             text-align: center;
             margin-bottom: 30px;
             color: #555;
+        }
+        #loading {
+            text-align: center;
+            font-size: 1.2em;
+            color: #2980b9;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
         .question-card {
             margin-bottom: 25px;
@@ -60,6 +66,7 @@
             font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin-top: 20px;
         }
         button:hover {
             background-color: #2980b9;
@@ -68,6 +75,7 @@
             color: #e74c3c;
             text-align: center;
             font-weight: bold;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -77,66 +85,92 @@
     <h1>Team Preferences Questionnaire</h1>
     <p class="instructions">Please fill out this form to help us decide our problem statement. Once submitted, a CSV file with your answers will be downloaded. Please send that file to the team lead.</p>
     
-    <form id="questionnaire-form" onsubmit="event.preventDefault(); generateSummary();"></form>
+    <div id="loading">Loading questions from CSV...</div>
+    <div id="error-msg" class="error"></div>
+
+    <form id="questionnaire-form" onsubmit="event.preventDefault(); generateSummary();" style="display:none;"></form>
     
     <button id="submit-btn" style="display:none;" onclick="generateSummary()">Download My Answers</button>
-    <div id="error-msg" class="error"></div>
 </div>
 
 <script>
-    let questionsData = [];
+    let validQuestionsMap = []; // Stores the mapping for the download step
 
-    // Fetch and parse the CSV from the GitHub repo
     Papa.parse("extended_questionnaire.csv", {
         download: true,
         header: true,
         skipEmptyLines: true,
         complete: function(results) {
-            questionsData = results.data;
-            renderForm();
-        },
-        error: function(err) {
-            console.error("Error loading CSV:", err);
-            document.getElementById('error-msg').innerText = "Error loading the questionnaire. Please ensure 'extended_questionnaire.csv' is uploaded to your GitHub repository and you are viewing this via GitHub Pages.";
-        }
-    });
-
-    function renderForm() {
-        const form = document.getElementById('questionnaire-form');
-        
-        questionsData.forEach((q) => {
-            if (!q.Question) return; // Skip empty rows
-
-            const card = document.createElement('div');
-            card.className = 'question-card';
+            document.getElementById('loading').style.display = 'none';
+            const data = results.data;
             
-            const title = document.createElement('div');
-            title.className = 'question-title';
-            title.innerText = `${q.Question_Number}. ${q.Question}`;
-            card.appendChild(title);
+            if (data.length === 0) {
+                document.getElementById('error-msg').innerHTML = "CSV loaded, but it appears to be empty!";
+                return;
+            }
 
-            // Filter out empty options
-            const options = [q.Option_A, q.Option_B, q.Option_C, q.Option_D, q.Option_E].filter(opt => opt && opt.trim() !== "");
+            const form = document.getElementById('questionnaire-form');
+            let questionsAdded = 0;
 
-            options.forEach((opt) => {
-                const label = document.createElement('label');
-                label.className = 'option';
+            data.forEach((row, index) => {
+                const keys = Object.keys(row);
+                if (keys.length < 2) return; // Skip invalid empty rows
 
-                const radio = document.createElement('input');
-                radio.type = 'radio';
-                radio.name = `question_${q.Question_Number}`;
-                radio.value = opt;
-                radio.required = true;
+                // Dynamically read columns (Col 0: Number, Col 1: Question, Col 2+: Options)
+                const qNum = row[keys[0]] || (index + 1);
+                const qText = row[keys[1]];
 
-                label.appendChild(radio);
-                label.appendChild(document.createTextNode(" " + opt));
-                card.appendChild(label);
+                if (!qText || qText.trim() === "") return;
+
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                
+                const title = document.createElement('div');
+                title.className = 'question-title';
+                title.innerText = `${qNum}. ${qText}`;
+                card.appendChild(title);
+
+                // Dynamically grab all columns after the first two as options
+                const options = [];
+                for(let i = 2; i < keys.length; i++) {
+                    const optVal = row[keys[i]];
+                    if (optVal && optVal.trim() !== "") {
+                        options.push(optVal);
+                    }
+                }
+
+                options.forEach((opt) => {
+                    const label = document.createElement('label');
+                    label.className = 'option';
+
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = `question_${qNum}`;
+                    radio.value = opt;
+                    radio.required = true;
+
+                    label.appendChild(radio);
+                    label.appendChild(document.createTextNode(" " + opt));
+                    card.appendChild(label);
+                });
+
+                form.appendChild(card);
+                validQuestionsMap.push({ num: qNum, text: qText });
+                questionsAdded++;
             });
 
-            form.appendChild(card);
-        });
-        document.getElementById('submit-btn').style.display = 'block';
-    }
+            if (questionsAdded > 0) {
+                form.style.display = 'block';
+                document.getElementById('submit-btn').style.display = 'block';
+            } else {
+                document.getElementById('error-msg').innerHTML = "No valid questions found in the CSV.";
+            }
+        },
+        error: function(err) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error-msg').innerHTML = `Failed to load CSV: ${err.message}`;
+        }
+    });
 
     function generateSummary() {
         const form = document.getElementById('questionnaire-form');
@@ -150,13 +184,11 @@
         const formData = new FormData(form);
         let summary = "Question_Number,Answer\n";
         
-        questionsData.forEach(q => {
-            if (!q.Question) return;
-            const answer = formData.get(`question_${q.Question_Number}`);
-            
+        validQuestionsMap.forEach(q => {
+            const answer = formData.get(`question_${q.num}`);
             // Escape quotes for CSV safety
             const safeAnswer = answer ? `"${answer.replace(/"/g, '""')}"` : '""';
-            summary += `${q.Question_Number},${safeAnswer}\n`;
+            summary += `"${q.num}",${safeAnswer}\n`;
         });
 
         // Prompt user for their name to name the file
